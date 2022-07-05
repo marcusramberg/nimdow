@@ -1,10 +1,16 @@
-# nimdow
+# Nimdow
 
 A window manager written in [Nim](https://nim-lang.org/)
 
-**NOTE: Nimdow is in Beta but is very usable. Please report any bugs you may find.**
+Nimdow is a minimal tiling window manager:
+* Flexible tag based workspaces like dwm
+* Written in [Nim](https://nim-lang.org/)
+* Comes with a fully configurable bar
+* Fully configurable through a `toml` file.
 
 I am using this project to learn Nim, x11, and to replace my build of **dwm** (written in C).
+
+**NOTE: Nimdow is in Beta but is very usable. Please report any bugs you may find.**
 
 **Discord community:** https://discord.gg/vPCumzeqqa
 
