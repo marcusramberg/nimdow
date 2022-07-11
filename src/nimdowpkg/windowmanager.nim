@@ -969,11 +969,17 @@ proc onConfigureNotify(this: WindowManager, e: XConfigureEvent) =
       this.rootWindowHeight = e.height
       let monitorAreas = this.display.getMonitorAreas(this.rootWindow)
 
+      var monitors: OrderedTable[MonitorID, Monitor]
       for i, area in monitorAreas:
         let id: MonitorID = i + 1
-        let monitor = this.monitors[id]
-        monitor.area = area
-        monitor.updateMonitor()
+        if this.monitors.hasKey(id):
+          monitors[id] = this.monitors[id]
+          monitors[id].area = area
+          monitors[id].updateMonitor()
+        else:
+          monitors[id] =
+            newMonitor(id, this.display, this.rootWindow, area, this.config)
+      this.monitors = monitors
 
 proc addIconToSystray(this: WindowManager, window: Window) =
   var
