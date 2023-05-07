@@ -55,6 +55,16 @@ when isMainModule:
   except:
     log getCurrentExceptionMsg(), lvlError
 
+  enableLogging(loadedConfig.loggingEnabled)
+
+  log "Starting Nimdow " & version
+
+  try:
+    loadedConfig.runAutostartCommands(configTable)
+    loadedConfig.populateAppRules(configTable)
+  except:
+    log getCurrentExceptionMsg(), lvlError
+
   let nimdow = newWindowManager(eventManager, loadedConfig, configTable)
 
   addExitProc(proc() =
@@ -62,16 +72,6 @@ when isMainModule:
     discard XCloseDisplay(nimdow.display)
     discard tryRemoveFile(ipc.socketLoc)
   )
-
-  logger.enabled = loadedConfig.loggingEnabled
-
-  log "Starting Nimdow " & version
-
-  try:
-    loadedConfig.populateAppRules(configTable)
-    loadedConfig.runAutostartCommands(configTable)
-  except:
-    log getCurrentExceptionMsg(), lvlError
 
   let
     selector = newSelector[pointer]()
@@ -107,4 +107,3 @@ when isMainModule:
         discard XNextEvent(nimdow.display, xEvent.addr)
         eventManager.dispatchEvent(xEvent)
       eventManager.checkForProcessesToClose()
-

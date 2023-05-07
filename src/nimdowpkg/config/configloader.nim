@@ -420,6 +420,16 @@ proc populateGeneralSettings*(this: Config, configTable: TomlTable) =
     raise newException(Exception, "Invalid settings table")
 
   let settingsTable = configTable["settings"].tableVal
+
+  # Set logging first in case of early return
+  if settingsTable.hasKey("loggingEnabled"):
+    let loggingEnabledSetting = settingsTable["loggingEnabled"]
+    if loggingEnabledSetting.kind == TomlValueKind.Bool:
+      this.loggingEnabled = loggingEnabledSetting.boolVal
+      log "Logging enabled!", lvlInfo
+    else:
+      log "loggingEnabled is not true/false!", lvlWarn
+
   this.populateBarSettings(this.defaultMonitorSettings.barSettings, settingsTable)
   this.populateLayoutSettings(this.defaultMonitorSettings.layoutSettings, settingsTable)
 
@@ -449,13 +459,6 @@ proc populateGeneralSettings*(this: Config, configTable: TomlTable) =
     this.populateLayoutSettings(monitorSettings.layoutSettings, settingsTable)
 
   # General settings
-  if settingsTable.hasKey("loggingEnabled"):
-    let loggingEnabledSetting = settingsTable["loggingEnabled"]
-    if loggingEnabledSetting.kind == TomlValueKind.Bool:
-      this.loggingEnabled = loggingEnabledSetting.boolVal
-    else:
-      log "loggingEnabled is not true/false!", lvlWarn
-
   if settingsTable.hasKey("reverseTagScrolling"):
     let reverseTagScrollingSetting = settingsTable["reverseTagScrolling"]
     if reverseTagScrollingSetting.kind == TomlValueKind.Bool:

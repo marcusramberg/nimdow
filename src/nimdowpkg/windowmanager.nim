@@ -305,9 +305,9 @@ proc reloadConfig*(this: WindowManager) =
     this.mapConfigActions()
     this.config.populateKeyComboTable(configTable, this.display)
     this.config.populateGeneralSettings(configTable)
-    logger.enabled = this.config.loggingEnabled
+    enableLogging(this.config.loggingEnabled)
   except:
-    logger.enabled = oldLoggingEnabled
+    enableLogging(oldLoggingEnabled)
     # If the config fails to load, restore the old config.
     this.config = oldConfig
     log getCurrentExceptionMsg(), lvlError
